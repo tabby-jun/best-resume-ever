@@ -9,8 +9,6 @@
 
 <div align="center">
 
-[![Travis badge](https://travis-ci.org/salomonelli/best-resume-ever.svg?branch=master)](https://travis-ci.org/salomonelli/best-resume-ever)
-
 </div>
 
 <h4 align="center">
@@ -36,6 +34,22 @@
 
 <br>
 <br>
+
+# Jun's best-resume-ever Creative Template Changes
+
+I have received some interest in my custom modifications of the creative template in my own resume.
+So I am publishing this as an open fork.
+
+Changes in Creative Template:
+
+* Added Profile Picture
+* Added a way to display line breaks
+* Added a section on 'Achievements'
+
+Todo:
+
+* Merge commits from upstream
+* Maybe if possible merge back to source project
 
 ## Prerequisite
 
