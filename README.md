@@ -51,6 +51,8 @@ Todo:
 * Merge commits from upstream
 * Maybe if possible merge back to source project
 
+**The actual changes are not in this readme branch, but in `jun/creative-extended` instead**
+
 ## Prerequisite
 
 1. It is required to have NodeJs with version 8.5 or higher
