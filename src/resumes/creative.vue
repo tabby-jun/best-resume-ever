@@ -2,6 +2,9 @@
   <div class="resume" id="resume2">
     <div class="left-column">
       <div>
+        <div class="idimage">
+          <div class="img"></div>
+        </div>
         <div class="headline">
           <span> {{ person.name.first }} {{ person.name.middle }} </span>
           <span class="uppercase"> {{ person.name.last }} </span>
@@ -15,11 +18,11 @@
       </div>
 
       <div class="multi-line-txt">
-        {{ person.about }}
+        <div v-for="line in person.about.split('\n')">{{ line }}</div>
       </div>
 
       <div class="multi-line-txt">
-        {{ person.knowledge }}
+        <div v-for="line in person.knowledge.split('\n')">{{ line }}</div>
       </div>
 
       <a :href="contactLinks.email">
@@ -78,7 +81,7 @@
       </div>
 
       <div class="hobbies-container">
-        <!-- <span class="subheadline">Hobbies</span> -->
+        <span class="subheadline">Hobbies</span>
         <div class="hobbies-content">
           <a v-for="(hobby, index) in person.hobbies" :key="index"
             class="hobby-item"
@@ -96,6 +99,17 @@
     </div>
 
     <div class="right-column">
+      
+      <div class="experience-section section">
+        <div class="icon">
+          <i class="material-icons small-icon">info</i>
+          <span class="section-headline">Summary</span>
+        </div>
+        <div class="section-content">
+           <div class="section-content__text" v-for="line in person.summary.split('\n')"> {{ line }}</div>
+        </div>
+      </div>
+      
       <div class="experience-section section">
         <div class="icon">
           <i class="material-icons small-icon">work</i>
@@ -110,7 +124,18 @@
             <span class="section-content__header"> {{ experience.position }}</span>
             <span class="section-content__subheader"> {{ experience.company }}</span>
             <div class="section-content__text"> {{ experience.timeperiod }}</div>
-            <span class="section-content__text--light"> {{ experience.description }}</span>
+            <div class="section-content__text" v-for="line in experience.description.split('\n')"> {{ line }}</div>
+            <div class="section-content__text">
+              <ul>
+                <li v-for="point in experience.points">{{ point.point }}</li>
+              </ul>
+            </div>
+            <span class="section-content__subheader" v-if="experience.achievements"> Achievements </span>
+            <div class="section-content__text"> 
+              <ul>
+                <li v-for="point in experience.achievements">{{ point.point }}</li>
+              </ul>
+            </div>
           </a>
         </div>
       </div>
@@ -129,7 +154,7 @@
             <span class="section-content__header"> {{ education.school }} </span>
             <span class="section-content__subheader">{{ education.degree }}</span>
             <span class="section-content__text"> {{ education.timeperiod }} </span>
-            <span class="section-content__text--light"> {{ education.description }} </span>
+            <div class="section-content__text" v-for="line in education.description.split('\n')"> {{ line }} </div>
           </a>
         </div>
       </div>
@@ -149,7 +174,7 @@
             <span class="section-content__header"> {{ project.name }} </span>
             <span class="section-content__subheader">{{ project.platform }}</span>
             <span class="section-content__text"> {{ project.description }} </span>
-            <span class="section-content__text--light"> {{ project.url }} </span>
+            <span class="section-content__text"> {{ project.url }} </span>
           </a>
         </div>
       </div>
@@ -188,7 +213,7 @@
 
             <span class="section-content__header"> {{ contribution.name }} </span>
             <span class="section-content__text"> {{ contribution.description }} </span>
-            <span class="section-content__text--light" style="word-break: break-all;">
+            <span class="section-content__text" style="word-break: break-all;">
               {{ contribution.url }}
             </span>
           </a>
@@ -199,301 +224,327 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { getVueOptions } from './options';
+  import Vue from 'vue';
+  import { getVueOptions } from './options';
 
-const name = 'creative';
+  const name = 'creative';
 
-export default Vue.component(name, getVueOptions(name));
+  export default Vue.component(name, getVueOptions(name));
 </script>
 
 <style lang="less" scoped>
+  @accent-color: #9200FA;
 
-@accent-color: #A800FA;
+  .resume {
+    display: flex;
+    position: relative;
 
-.resume {
-  display: flex;
-  position: relative;
+    font-family: 'Roboto' !important;
+    font-size: 0.9em;
+  }
 
-  font-family:'Roboto' !important;
-  font-size: 0.9em;
-}
+  .left-column {
+    width: 30%;
+    height: 100%;
+    padding: 30px;
+    padding-top: 45px;
+    text-align: left;
 
-.left-column {
-  width: 30%;
-  height: 100%;
-  padding: 30px;
-  padding-top: 45px;
-  text-align: left;
+    color: #ffffff;
+    color: rgba(255, 255, 255, 0.59);
+    background-color: @accent-color; //overflow: hidden;
+    display: block;
+    z-index: 2;
 
-  color: #ffffff;
-  color:rgba(255,255,255,0.59);
-  background-color: @accent-color;
-  overflow: hidden;
-  display: block;
-  z-index: 2;
+    opacity: 1; // lower this value (0.7 approx.) to see the cover image
+    position: absolute;
+  } // Background cover displayed on the left-column side
+  // ------------
+  .left-column-bg {
+    // You can put your own cover image in the url path
+    // --------------------------------------
+    // background: url('../assets/cover.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 25% 25%;
+    opacity: .4; // up this value to contrast the cover image
+    height: 100%;
+    width: 35%;
+    padding: 30px;
+    padding-top: 45px;
 
-  opacity: 1; // lower this value (0.7 approx.) to see the cover image
-  position: absolute;
-}
+    display: block; //overflow: hidden;
+    position: relative;
+    top: 0;
+    z-index: 1;
+  }
 
-// Background cover displayed on the left-column side
-// ------------
-.left-column-bg {
-  // You can put your own cover image in the url path
-  // --------------------------------------
-  // background: url('../assets/cover.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 25% 25%;
-  opacity: .4; // up this value to contrast the cover image
+  .right-column {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
 
-  height: 100%;
-  width: 35%;
-  padding: 30px;
-  padding-top: 45px;
+    height: 100%;
+    width: 65%;
+  }
 
-  display: block;
-  overflow: hidden;
-  position: relative;
-  top: 0;
-  z-index: 1;
-}
-
-.right-column {
-  display: flex;
-  flex-direction: column;
-  padding: 30px;
-
-  height: 100%;
-  width: 65%;
-}
-
-a {
-  color: inherit;
-  cursor:pointer;
-  text-decoration-line: none;
-
-  &:visited {
+  a {
     color: inherit;
+    cursor: pointer;
+    text-decoration-line: none;
+
+    &:visited {
+      color: inherit;
+    }
   }
-}
 
-.material-icons {
-  color: @accent-color;
-  position: relative;
-  top: 5px;
-}
-
-.font-awesome-icons {
-  color: @accent-color;
-  font-size: 1.3em;
-  margin-right: 6px;
-}
-
-.small-icon {
-  top: 2.5px;
-  font-size: 1.4em;
-}
-
-.contact-icon {
-  color: white;
-  font-size: 1.5em;
-  margin-right: 10px;
-
-  top: 2px;
-  position: relative;
-}
-
-.contact-icon-svg {
-  margin-top: -2.5px;
-  margin-right: 10px;
-
-  transform: scale(1);
-
-  top: 5px;
-  position: relative;
-}
-
-.contact-icon-svg path {
-  fill: white;
-}
-
-.external-link {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.block-marged {
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-.multi-line-txt {
-  margin-top: 30px;
-  margin-bottom: 20px;
-}
-
-.social-container {
-  margin-top: 30px;
-  margin-bottom: 30px;
-}
-
-.headline {
-  color: white;
-  font-size: 1.3em;
-  font-weight: bold;
-}
-
-.txt-full-white {
-  color: white;
-}
-
-.uppercase {
-  text-transform: uppercase;
-}
-
-.section-headline {
-  color: @accent-color;
-  display: inline-block;
-  font-size: 1.2em;
-  margin-left: 5px;
-}
-
-.section-content {
-  margin-top: 10px;
-  padding-left: 32px;
-}
-
-.section-content__item {
-  display: block;
-  margin-bottom: 10px;
-}
-
-.section-content__item-grid {
-  flex: 1 1 0;
-
-  margin-bottom: 10px;
-  padding-right: 10px;
-}
-
-.section-content-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding-left: 32px;
-}
-
-.grid-item {
-  padding-right: 20px;
-}
-
-.section-content__header {
-  display: block;
-
-  font-size: 1.1em;
-  font-weight: 500;
-}
-
-.squarred-grid-item {
-  display: block;
-
-  border: 1px solid @accent-color;
-
-  background-color: @accent-color;
-  color: white;
-
-  margin-top: 5px;
-  padding: 5px;
-
-  transition: .5s;
-
-  &:hover {
-    background-color: transparent;
+  .material-icons {
     color: @accent-color;
+    position: relative;
+    top: 5px;
+  }
+
+  .font-awesome-icons {
+    color: @accent-color;
+    font-size: 1.3em;
+    margin-right: 6px;
+  }
+
+  .small-icon {
+    top: 2.5px;
+    font-size: 1.4em;
+  }
+
+  .contact-icon {
+    color: white;
+    font-size: 1.5em;
+    margin-right: 10px;
+
+    top: 2px;
+    position: relative;
+  }
+
+  .contact-icon-svg {
+    margin-top: -2.5px;
+    margin-right: 10px;
+
+    transform: scale(1);
+
+    top: 5px;
+    position: relative;
+  }
+
+  .contact-icon-svg path {
+    fill: white;
+  }
+
+  .external-link {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .block-marged {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  .multi-line-txt {
+    color: white;
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+
+  .social-container {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .headline {
+    color: white;
+    font-size: 1.3em;
+    font-weight: bold;
+  }
+
+  .txt-full-white {
+    color: white;
+  }
+
+  .uppercase {
+    text-transform: uppercase;
+  }
+
+  .section-headline {
+    color: @accent-color;
+    display: inline-block;
+    font-size: 1.2em;
+    margin-left: 5px;
+  }
+
+  .section-content {
+    margin-top: 10px;
+    padding-left: 32px;
+  }
+
+  .section-content__item {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .section-content__item-grid {
+    flex: 1 1 0;
+
+    margin-bottom: 10px;
+    padding-right: 10px;
+  }
+
+  .section-content-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 32px;
+  }
+
+  .grid-item {
+    padding-right: 20px;
+  }
+
+  .section-content__header {
+    display: block;
+
+    font-size: 1.1em;
+    font-weight: 500;
+  }
+
+  .squarred-grid-item {
+    display: block;
+
+    border: 1px solid @accent-color;
+
+    background-color: @accent-color;
+    color: white;
+
+    margin-top: 5px;
+    padding: 5px;
+
     transition: .5s;
+
+    &:hover {
+      background-color: transparent;
+      color: @accent-color;
+      transition: .5s;
+    }
   }
-}
 
-.section-content__subheader {
-  display: block;
-  font-weight: 400;
-}
-
-.section-content__text {
-  display: block;
-  font-weight: 300;
-}
-
-.section-content__text--light {
-  color: rgba(0,0,0,0.42);
-  font-weight: 300;
-}
-
-.section-content__subheader,
-.section-content__text--light,
-.section-content__header {
-  line-height: 1.5em;
-}
-
-.section {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.lang-icon {
-  color: rgba(0,0,0,0.72);
-  font-size: 3em;
-
-  &:hover {
-    color: @accent-color;
+  .section-content__subheader {
+    display: block;
+    font-weight: 400;
   }
-}
 
-.hobbies-container {
-  margin-top: 30px;
-}
+  .section-content__text {
+    display: block;
+    font-weight: 300;
+  }
 
-.hobbies-content {
-  display: flex;
-  flex-direction: column;
-}
+  .section-content__text--light {
+    color: rgba(0, 0, 0, 0.42);
+    font-weight: 300;
+  }
 
-.hobby-item {
-  display: grid;
-  grid-template-columns: 30px auto;
+  .section-content__subheader,
+  .section-content__text--light,
+  .section-content__header {
+    line-height: 1.5em;
+  }
 
-  color: rgba(255, 255, 255, .6);
+  .section {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 
-  margin-right: 25px;
-  margin-bottom: 10px;
+  .lang-icon {
+    color: rgba(0, 0, 0, 0.72);
+    font-size: 3em;
 
-  transition: .5s;
+    &:hover {
+      color: @accent-color;
+    }
+  }
 
-  &:hover {
+  .hobbies-container {
+    margin-top: 30px;
+  }
+
+  .hobbies-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hobby-item {
+    display: grid;
+    grid-template-columns: 30px auto;
+
     color: rgba(255, 255, 255, .8);
+
+    margin-right: 25px;
+    margin-bottom: 10px;
+
     transition: .5s;
+
+    &:hover {
+      color: rgba(255, 255, 255, .8);
+      transition: .5s;
+    }
   }
-}
 
-.hobby-item__icon {
-  font-size: 1.3em;
-}
+  .hobby-item__icon {
+    font-size: 1.3em;
+  }
 
-.hobby-item__icon-label {
-  top: 2.5px;
-  position: relative;
-}
+  .hobby-item__icon-label {
+    top: 2.5px;
+    position: relative;
+  }
 
-.subheadline {
-  color: rgba(255, 255, 255, .8);
-  font-size: 1.2em;
+  .subheadline {
+    color: rgba(255, 255, 255, .8);
+    font-size: 1.2em;
 
-  display: block;
-  margin-bottom: 10px;
-}
+    display: block;
+    margin-bottom: 10px;
+  }
 
+  .idimage {
+    width: 200px;
+    height: 200px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    .img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-image: url('../../resume/id.jpg');
+      background-repeat: none;
+      background-position: center;
+      background-size: cover;
+    }
+  }
+
+  .tab {
+    text-indent: 10px;
+  }
+
+  ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 0.2em;
+    margin-block-end: 0.2em;
+    margin-inline-start: 10px;
+    margin-inline-end: 20px;
+    padding-inline-start: 10px;
+  }
 </style>
